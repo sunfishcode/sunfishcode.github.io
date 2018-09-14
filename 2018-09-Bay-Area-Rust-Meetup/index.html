@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Cranelift, WebAssembly, and Beyond</title>
+
+    <meta name="description" content="The Cranelift code generator, its use in implementing WebAssembly, and more!">
+    <meta name="author" content="Dan Gohman">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/sky.css" id="theme">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section>
+          <h3>Cranelift, WebAssembly, and Beyond</h3>
+          <img width="178" height="238" data-src="crane-wasm.svg" alt="Cranelift/WebAssembly Logo">
+          <img width="178" height="238" data-src="crane-rust.svg" alt="Cranelift/Rust Logo">
+        </section>
+
+        <section>
+          <h4>Rust and WebAssembly are cool!</h4>
+          <p>
+          <img width="350" height="300" data-src="rust-wasm-stickers.jpeg" alt="Photo of Rust/WebAssembly Stickers">
+          </p>
+          <p>
+          :-)
+          </p>
+          <pre><code class="text" data-trim contenteditable>
+            When someone gives a talk these days that includes both Rust and
+            WebAssembly, it's usually about compiling Rust into WebAssembly.
+            And for good reason! There's lots of cool stuff happening. But I'm
+            going to talk about a different topic which touches on both Rust
+            and WebAssembly :-).
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Cranelift</h2>
+          <p>
+          <h3><small>A Code Generator</small></h3>
+          <a href="https://cranelift.readthedocs.io/">https://cranelift.readthedocs.io/</a>
+          </p>
+          <pre><code class="text" data-trim contenteditable>
+            That topic is Cranelift!
+          </code></pre>
+        </section>
+
+        <section>
+          <h3>Cranelift IR</h3>
+          <p>
+          <img width="710" height="390" data-src="clif-syntax.png" alt="Cranelift IR screenshot">
+          </p>
+          <a href="https://cranelift.readthedocs.io/en/latest/ir.html">https://cranelift.readthedocs.io/en/latest/ir.html</a>
+          <pre><code class="text" data-trim contenteditable>
+            A code generator is translator from an Intermediate Representation
+            (IR) data structure into machine code. Pictured here is an example
+            of pretty-printed Cranelift IR.
+          </code></pre>
+        </section>
+
+        <section>
+          <p>
+          <img width="640" height="500" data-src="iadd-docs.png" alt="builder API documentation example">
+          <a href="https://cranelift.readthedocs.io/en/latest/ir.html">https://cranelift.readthedocs.io/en/latest/ir.html</a>
+          <pre><code class="text" data-trim contenteditable>
+            All the instructions in this IR are documented. Here's a brief
+            screenshot of the documentation for <code>iadd</code> and
+            <code>iadd_imm</code>.
+          </code></pre>
+        </section>
+
+        <section>
+          <img width="720" height="220" data-src="builder-example.png" alt="builder usage example">
+          <p>
+            <a href="https://github.com/CraneStation/simplejit-demo">https://github.com/CraneStation/simplejit-demo</a>
+          <pre><code class="text" data-trim contenteditable>
+            And for each instruction, there's a corresponding function in
+            Cranelift's builder APIs. Here's an example from the
+            simplejit-demo program showing how integer add is translated.
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>SSA form</h2>
+          <p>
+          <code>
+          <pre>
+
+              x = 2;
+
+              foo(x);
+
+              x = 3;
+
+              foo(x);
+          </pre>
+          </code>
+          </p>
+          <pre><code class="text" data-trim contenteditable>
+            Cranelift IR uses Single Static Assignment (SSA) form. This
+            roughly means that when the source code has variables which are
+            reassigned, Cranelift will split the variables so that each value
+            has only a single place where it obtains a value.
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>SSA form</h2>
+          <p>
+          <code>
+          <pre>
+
+              if ... {
+                 x = 2;
+              } else {
+                 x = 3;
+              }
+
+              foo(x);
+          </pre>
+          </code>
+          </p>
+          <pre><code class="text" data-trim contenteditable>
+            SSA form can be somewhat tricky to construct, such as in the
+            example here, where the value of x depends on the path taken
+            through the code.
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>SSA construction</h2>
+          <p>
+          <img width="720" height="150" data-src="var-api.png" alt="Variable API documentation">
+          </p>
+          <p>
+          <code>
+          <pre>
+
+              let x;   // declare_var
+
+              x = 2;   // def_var
+
+              foo(x);  // use_var
+
+              x = 3;   // def_var
+          </pre>
+          </code>
+          </p>
+          <p>
+          <a href="https://docs.rs/cranelift-frontend/">https://docs.rs/cranelift-frontend/</a>
+          </p>
+            <aside class="notes">
+              This is in <code>FunctionBuilder</code>.
+            </aside>
+          <pre><code class="text" data-trim contenteditable>
+            To help, the cranelift-frontend crate provides an API which
+            handles all the details of building SSA form automatically.
+            With three functions, `declare_var`, `use_var`, and `def_var`,
+            frontends can easily translate code containing mutable
+            variables. Note that "use" and "def" in this context are
+            compiler jargon for "read" and "write".
+          </code></pre>
+        </section>
+
+        <section>
+            <h3>A simple loop example</h3>
+          <code>
+          <pre>
+
+             function %foo(i32) -> i32 {
+             ebb0(v0: i32):
+                 v2 = iconst.i32 0
+                 jump ebb1(v2)
+
+             ebb1(v6: i32):
+                 v12 = iadd_imm.i32 v6, 1
+                 v13 = icmp slt v12, v0
+                 brnz v13, ebb1(v12)
+                 return v12
+             }
+          </pre>
+          </code>
+          <pre><code class="text" data-trim contenteditable>
+            Here's a closer look at some IR. Functions contain extended
+            basic blocks, which are sequences of instructions entered from
+            the top (though potentially exited from the middle or end).
+            Extended basic blocks can have block parameters, with jumps to
+            them passing arguments, which are analogous to PHIs in
+            traditional SSA form. Of course, this is all handled
+            automatically by the library.
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Modularity</h2>
+          <pre><code class="text" data-trim contenteditable>
+            Cranelift is organized as a collection of crates, to allow users
+            to use just the pieces they need.
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Data structures</h2>
+          <p>
+          <ul>
+              <li>cranelift-bforest</li>
+              <li>cranelift-entity</li>
+          </ul>
+          <pre><code class="text" data-trim contenteditable>
+            These two crates provide basic data structures. cranelift-bforest
+            provides some specialized B+-trees, and cranelift-entity provides
+            a specialized entity data structure.
+          </code></pre>
+        </section>
+
+        <section id="fragments">
+          <h3>Entity</h3>
+          <p>
+          <code>PrimaryMap</code> - an vector with its own index type.
+              <img width="720" height="190" style="background-color:white" data-src="primary-map.svg" alt="PrimaryMap illustration">
+          </p>
+          <p class="fragment">
+          <code>EntityMap</code> - a companion vector
+          <img width="720" height="190" style="background-color:white" data-src="entity-map.svg" alt="EntityMap illustration">
+          </p>
+            <aside class="notes">
+              "Back to the future" stuff.
+            </aside>
+          <pre><code class="text" data-trim contenteditable>
+            The entity data structure allows us to represent data in dense
+            form with indices rather than pointers, and relatively fewer
+            of them than typical pointer-based IRs.
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>The Codegen Family</h2>
+          <ul>
+              <li>cranelift-codegen</li>
+              <li>cranelift-frontend</li>
+              <li>cranelift-wasm</li>
+              <li>cranelift-native</li>
+              <li>cranelift (umbrella)</li>
+          </ul>
+          <pre><code class="text" data-trim contenteditable>
+            Codegen is the core crate that defines the IR and the code for
+            translating it to machine code. Frontend contains the IR builder
+            for use by code wanting to produce Cranelift IR. Wasm contains
+            code for translating WebAssembly into Cranelift IR, and Native
+            contains code for autodetecting host CPU features.
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>cranelift-codegen</h2>
+          <ul>
+              <li>legalization</li>
+              <li>sandboxing features</li>
+              <li>low-level optimizations</li>
+              <li>SSA-based register allocation</li>
+              <li>encoding</li>
+          </ul>
+          <p>
+          <a href="https://docs.rs/cranelift-codegen/">https://docs.rs/cranelift-codegen/</a>
+          <pre><code class="text" data-trim contenteditable>
+            The codegen crate is where compilation happens, which consists of
+            several steps.
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Developer utilities</h2>
+          <ul>
+              <li>cranelift-reader</li>
+              <li>cranelift-serde</li>
+              <li>cranelift-filetests</li>
+              <li>cranelift-tools (top level)</li>
+          </ul>
+          <pre><code class="text" data-trim contenteditable>
+            This next family of crates are focused on people working on
+            Cranelift, and provide parsing, serialization, testing, and
+            the top-level clif-util utility.
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>The Module Family</h2>
+          <ul>
+              <li>cranelift-module</li>
+              <li>cranelift-simplejit: JITs!</li>
+              <li>cranelift-faerie: native objects!</li>
+          </ul>
+          </p>
+          <p>
+            <a href="https://github.com/CraneStation/simplejit-demo">https://github.com/CraneStation/simplejit-demo</a>
+          <p>
+            <a href="https://github.com/CraneStation/simplejit-demo/tree/faerie">https://github.com/CraneStation/simplejit-demo/tree/faerie</a>
+          <pre><code class="text" data-trim contenteditable>
+            And finally, there's the module family of crates. This is an
+            optional family, which provides higher-level functionality,
+            making it easy to JIT code to memory and run it, or write out
+            a native object file (using the faerie library), though this
+            family is also somewhat opinionated, so users needing more
+            control are free to use the lower-level crates directly.
+          </code></pre>
+        </section>
+
+        <section id="fragments">
+          <h2>Expected use cases</h2>
+          <p>
+          <ul>
+              <li>Fastly</li>
+              <li>Mozilla SpiderMonkey</li>
+              <li>Nebulet OS</li>
+              <li>Wasmtime</li>
+              <li class="fragment">Rust backend</li>
+              <li class="fragment">and more!</li>
+          </ul>
+          </p>
+          <pre><code class="text" data-trim contenteditable>
+            We have several notable users working on building interesting
+            things with Cranelift!
+          </code></pre>
+        </section>
+
+        <!-- WebAssembly -->
+        <section id="fragments">
+		<h2>WebAssembly</h2>
+		<img width="200" height="200" data-src="crane-wasm.svg" alt="Cranelift and WebAssembly Logo">
+                <ul>
+                    <li class="fragment">No access to outside world except through imports and exports</li>
+                    <li class="fragment">Call stack outside address space</li>
+                </ul>
+        </section>
+        <section id="fragments">
+		<h3>Linear Memory</h3>
+                <p class="fragment">
+                Can be bounds-checked.
+        </section>
+        <section>
+		<h3>Bounds check optimizations</h3>
+		<ul>
+			<li>Constant-address accesses
+		<pre><code class="wat" data-trim contenteditable style="font-size: 18px;">
+                      i32.const 32
+                      i32.load
+		</code></pre>
+			</li>
+			<li>Multiple accesses to the same address
+		<pre><code class="wat" data-trim contenteditable style="font-size: 18px;">
+                      get_local $0
+                      get_local $0
+                      i32.load
+                      i32.const 1
+                      i32.add
+                      i32.store
+		</code></pre>
+			</li>
+		</ul>
+        </section>
+        <section>
+		<h3>Beware</h3>
+		<ul>
+			<li>User bounds checks
+		<pre><code class="c" data-trim contenteditable style="font-size: 18px;">
+		     if (i < n) {
+			         memory[i] = 0;
+		     }
+		</code></pre>
+			</li>
+			<li>Compiler bounds checks (eg. Rust)
+			<li>Bounds checks in loops</li>
+		</ul>
+        </section>
+        <section>
+		<h3>Guard page</h3>
+		<ul>
+			<li>Constant-offset accesses
+		<pre><code class="wat" data-trim contenteditable style="font-size: 18px;">
+    get_local $0
+    i32.load
+    get_local $0
+    i32.load offset=4
+    get_local $0
+    i32.load offset=8
+		</code></pre>
+			</li>
+			<li>Stride-one loop accesses?
+                            <pre><code class="rust">
+    let mut sum = 0;
+    for x in &array {
+         sum += x;
+    }
+                            </code></pre>
+                        </li>
+		</ul>
+        </section>
+        <section>
+		<h3>Bigger guard page</h3>
+		<h5>Eliminates all bounds checks</h5>
+		<img width="846" height="224" data-src="8-gig.svg" alt="8-GiG trick illustration">
+        </section>
+        <section id="fragments">
+		<h3>Indirect Calls</h3>
+        </section>
+        <section>
+		<pre><code class="wat" data-trim contenteditable style="font-size: 18px;">
+  		  (type $color (func (param f32) (result i32)))
+  		  (table 2 anyfunc)
+  		  (func $red (param f32) (result i32) i32.const 42)
+  		  (func $green (param f32) (result i32) i32.const 13)
+  		  (func $blue (param f64) (result i64) i64.const 88)
+  		  (elem (i32.const 0) $red $green $blue)
+		</code></pre>
+		<img width="246" height="274" data-src="abstract-table.svg" alt="WebAssembly abstract table">
+		<pre><code class="wat" data-trim contenteditable style="font-size: 18px;">
+  		  call_indirect (type $color)
+		</code></pre>
+        </section>
+        <section>
+		<img width="326" height="200" data-src="table-with-sigs.svg" alt="WebAssembly table with signatures"><br>
+		<pre><code class="asm" data-trim contenteditable style="font-size: 18px;">
+	mov	rax, qword ptr [rdi + 16]
+	cmp	dword ptr [rax], esi
+	jbe	.L0
+	ud2                                   ; table out of bounds
+.L0:
+	mov	rcx, qword ptr [rax + 8]
+	mov	eax, esi
+	shl	rax, 4
+	cmp	dword ptr [rcx + rax + 8], 7
+	je	.L1
+	ud2                                   ; signature mismatch
+.L1:
+	call	qword ptr [rcx + rax]
+		</code></pre>
+        </section>
+        <section>
+		<img width="200" height="180" data-src="table-concrete.svg" alt="WebAssembly table with no signatures">
+		<pre><code class="asm" data-trim contenteditable style="font-size: 18px;">
+	mov	rax, qword ptr [rdi + 16]
+	cmp	dword ptr [rax], esi
+	jbe	.L0
+	ud2                                   ; table out of bounds
+.L0:
+	mov	rax, qword ptr [rax + 8]
+	mov	ecx, esi
+	mov	esi, 7
+	call	qword ptr [rax + 8*rcx]
+		</code></pre>
+		<pre><code class="asm" data-trim contenteditable style="font-size: 18px;">
+callee_when_indirect:
+	cmp	esi, 7
+	je      .L1
+	ud2                                   ; signature mismatch
+.L1:
+callee:
+		</code></pre>
+        </section>
+        <!-- End WebAssembly -->
+
+        <!-- Rust -->
+        <section>
+		<h2>Compiling Rust</h2>
+		<img width="200" height="200" data-src="crane-rust.svg" alt="Cranelift and Rust Logo">
+        </section>
+        <section>
+		<h3>Compiling Rust:</h3>
+		<ul>
+			<li><strong>Debug compiler</strong></li>
+		</ul>
+        </section>
+        <section>
+		<h3>Debug compiler:</h3>
+		<ul>
+			<li>MIR to Cranelift IR translation</li>
+			<li>Debug info</li>
+			<li>Platform support</li>
+			<li>Long tail: Fall back to LLVM</li>
+		</ul>
+        </section>
+        <section>
+		<h3>Compiling Rust:</h3>
+		<ul>
+			<li>Debug compiler</li>
+			<li><strong>Pretty-Good compiler</strong></li>
+		</ul>
+        </section>
+        <section>
+		<h3>Pretty-Good compiler</h3>
+		<ul>
+			<li>MIR-level inlining, maybe copy propagation</li>
+			<li>Cranelift-level gvn, licm, isel, regalloc</li>
+		</ul>
+	</section>
+        <section>
+		<h3>Compiling Rust:</h3>
+		<ul>
+			<li>Debug compiler</li>
+			<li>Pretty-Good compiler</li>
+			<li><strong>Rust optimizer</strong></li>
+		</ul>
+        </section>
+	<section>
+		<h3>Rust optimizer</h3>
+        </section>
+        <section>
+		<h4>Superoptimization</h4>
+	</section>
+	<section id="fragments">
+		<h5>Aliasing xor mutability</h5>
+		<ul>
+			<li class="fragment fade-in-then-semi-out">eliminate use-after-free</li>
+		</ul>
+	</section>
+	<section>
+		<img width="578" height="238" data-src="matrix-multiply-cxx.png" alt="Matrix Multiply in C++">
+	</section>
+	<section if="fragments">
+		<h5>Aliasing xor mutability</h5>
+		<ul>
+			<li class="fragment fade-in-then-semi-out">eliminates use-after-free</li>
+			<li class="fragment fade-in-then-semi-out">catches a class of correctness bugs</li>
+			<li class="fragment fade-in-then-semi-out">thread safety</li>
+		</ul>
+	</section>
+	<section>
+		<img width="678" height="438" data-src="yes.png" alt="YES">
+	</section>
+	<section>
+		<h4>Rust optimizer:</h4>
+		<h5>Aliasing xor mutability</h5>
+		<ul>
+			<li>eliminates use-after-free</li>
+			<li>helps a class of correctness bugs
+			<li>thread safety</li>
+			<li>optimizations!</li>
+		</ul>
+	</section>
+        <section>
+		<h3>Compiling Rust:</h3>
+		<ul>
+			<li>Debug compiler</li>
+			<li>Pretty-Good compiler</li>
+			<li>Rust optimizer</li>
+		</ul>
+        </section>
+        <!-- End Rust -->
+
+        <section>
+            <h2>Cranelift!</h2>
+            <p>
+            Please ask questions! 😃
+            <p>
+            <a href="https://cranelift.readthedocs.io/">https://cranelift.readthedocs.io/</a>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/search/search.js', async: true },
+          { src: 'plugin/zoom-js/zoom.js', async: true },
+          { src: 'plugin/notes/notes.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>

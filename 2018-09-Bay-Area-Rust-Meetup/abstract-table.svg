@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="91.413063mm"
+   height="112.83182mm"
+   viewBox="0 0 91.413063 112.83182"
+   version="1.1"
+   id="svg825"
+   inkscape:export-filename="/home/sunfish/bitmap.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="abstract-table.svg">
+  <defs
+     id="defs819" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="190.11364"
+     inkscape:cy="22.322751"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="5"
+     fit-margin-left="5"
+     fit-margin-right="5"
+     fit-margin-bottom="5"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata822">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-4.9553567,-41.907741)">
+    <rect
+       style="fill:#ff8400;fill-opacity:0.32156863;stroke:#000000;stroke-width:0.24977311;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5073"
+       width="40.315701"
+       height="25.878538"
+       x="50.523697"
+       y="71.97905"
+       ry="0.054827433" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:Vemana2000;-inkscape-font-specification:'Vemana2000, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="59.021267"
+       y="88.48629"
+       id="text5094"><tspan
+         sodipodi:role="line"
+         id="tspan5270"
+         x="59.021267"
+         y="88.48629">$red</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:Vemana2000;-inkscape-font-specification:Vemana2000;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="26.465931"
+       y="87.718956"
+       id="text5151"><tspan
+         sodipodi:role="line"
+         id="tspan5149"
+         x="26.465931"
+         y="87.718956"
+         style="stroke-width:0.26458332">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:Vemana2000;-inkscape-font-specification:Vemana2000;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="15.500823"
+       y="62.631966"
+       id="text5155"><tspan
+         sodipodi:role="line"
+         id="tspan5153"
+         x="15.500823"
+         y="62.631966"
+         style="stroke-width:0.26458332">Index</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:Vemana2000;-inkscape-font-specification:Vemana2000;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="55.218716"
+       y="62.628166"
+       id="text5159"><tspan
+         sodipodi:role="line"
+         id="tspan5157"
+         x="55.218716"
+         y="62.628166"
+         style="stroke-width:0.26458332">Value</tspan></text>
+    <rect
+       style="fill:#ff8400;fill-opacity:0;stroke:#000000;stroke-width:0.34549889;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5161"
+       width="40.597958"
+       height="102.37524"
+       x="10.128106"
+       y="47.08049"
+       ry="0.099975869" />
+    <rect
+       style="fill:#ff8400;fill-opacity:0;stroke:#000000;stroke-width:0.34549892;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5161-9"
+       width="40.597954"
+       height="102.37525"
+       x="50.597717"
+       y="47.08049"
+       ry="0.099975869" />
+    <rect
+       style="fill:#ff8400;fill-opacity:0;stroke:#000000;stroke-width:0.24977311;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5073-0"
+       width="40.315701"
+       height="25.878542"
+       x="10.324122"
+       y="71.97905"
+       ry="0.054827437" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:Vemana2000;-inkscape-font-specification:'Vemana2000, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="26.349806"
+       y="113.5975"
+       id="text5151-3"><tspan
+         sodipodi:role="line"
+         id="tspan5325"
+         x="26.349806"
+         y="113.5975">1</tspan></text>
+    <rect
+       style="fill:#ff8400;fill-opacity:0;stroke:#000000;stroke-width:0.24977311;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5073-0-0"
+       width="40.315701"
+       height="25.878542"
+       x="10.207997"
+       y="97.85759"
+       ry="0.054827437" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:Vemana2000;-inkscape-font-specification:'Vemana2000, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="26.349806"
+       y="139.47604"
+       id="text5151-1"><tspan
+         sodipodi:role="line"
+         id="tspan5327"
+         x="26.349806"
+         y="139.47604">2</tspan></text>
+    <rect
+       style="fill:#ff8400;fill-opacity:0;stroke:#000000;stroke-width:0.24977311;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5073-0-3"
+       width="40.315701"
+       height="25.878542"
+       x="10.207997"
+       y="123.73613"
+       ry="0.054827437" />
+    <rect
+       style="fill:#ff8400;fill-opacity:0.32156863;stroke:#000000;stroke-width:0.24977311;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5073-5"
+       width="40.315701"
+       height="25.878538"
+       x="50.523697"
+       y="97.85759"
+       ry="0.054827433" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:Vemana2000;-inkscape-font-specification:'Vemana2000, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="52.660255"
+       y="114.36483"
+       id="text5094-1"><tspan
+         sodipodi:role="line"
+         id="tspan5360"
+         x="52.660255"
+         y="114.36483">$green</tspan></text>
+    <rect
+       style="fill:#ff8400;fill-opacity:0.32156863;stroke:#000000;stroke-width:0.24977311;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5073-4"
+       width="40.315701"
+       height="25.878538"
+       x="50.726063"
+       y="123.57718"
+       ry="0.054827433" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:Vemana2000;-inkscape-font-specification:'Vemana2000, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="56.230213"
+       y="140.08443"
+       id="text5094-0"><tspan
+         sodipodi:role="line"
+         id="tspan5362"
+         x="56.230213"
+         y="140.08443">$blue</tspan></text>
+  </g>
+</svg>
