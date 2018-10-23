@@ -52,7 +52,7 @@ sometimes it doesn't.
 
 ### Yeah so what about `x * 2`...
 
-`x * 2` is equivalent to `x + x`. So which of these should be
+`x * 2` is equivalent to `x + x`; which of these should be
 the canonical form? It might seem like we might want to say: pick whatever's
 optimal for the target architecture. Addition is generally
 faster than multiplication, so that would suggest we pick `x + x` as
@@ -72,7 +72,7 @@ powers of two strewn throughout the compiler.
 
 Efficiency on the target machine still matters, but we can defer thinking
 about that until codegen, where it's no longer as important to enable
-subsequent optimizations. So at that point, we're going to start caring about picking between `+`,
+subsequent optimizations. At that point, we're going to start caring about picking between `+`,
 `*`, and `<<` based on which one executes fastest.
 
 The basic philosophy
@@ -91,9 +91,9 @@ ultimately, in its purest form, canonicalization just focuses on
 removing unnecessary variation so that subsequent optimizations can
 be simpler.
 
-> Canonical form, canonical form\
-Canonical form hates optimal form\
-They have a fight, canonical wins\
+> Canonical form, canonical form<br>
+Canonical form hates optimal form<br>
+They have a fight, canonical wins<br>
 Canonical form…
 
 (sung to the tune of "Particle Man" by They Might Be Giants)
