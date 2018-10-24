@@ -78,7 +78,7 @@ subsequent optimizations. At that point, we're going to start caring about picki
 The basic philosophy
 of canonicalization says that canonical forms should be translated into
 optimal forms toward the back of the compiler, after all mid-level
-optimizations which benefit from canonical for are done. It's also
+optimizations which benefit from canonical form are done. It's also
 worth noting that codegen itself benefits from having the
 code coming into it be in canonical form, so that it doesn't have to
 recognize all the ways to write `x << 1`, and can just recognize one
@@ -131,7 +131,7 @@ Think of old-school C code, written at a time when "C is a portable assembly lan
 was more true than it is today, where calls that were important to inline were
 written as macros. In many ways, one of the jobs of compilers for higher-level languages
 is to compile them down to roughly this level, so that they can be optimized using
-optimization techniques work well at this level. In theory, we could define the
+optimization techniques which work well at this level. In theory, we could define the
 task of a canonicalizing inliner to just be to inline code down to what it would have
 looked like if that same code had been written in old-school C (at least with
 respect to inlining). That's not very pure, and it's difficult to precisely describe,
